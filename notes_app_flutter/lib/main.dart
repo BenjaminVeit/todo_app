@@ -15,7 +15,7 @@ TODO:
 - Einstellungen für Darkmode?
 - Wenn User auf Abgeschlossene Einträge geht, dann sollen hier alle gelistet werden, welche bei Fertiggestellt ein true haben
 - Vielleicht vom Benutzer beim ersten mal starten einen Namen verlangen, welcher immer wieder verwendet wird um eine direkte Ansprache zu ermöglichen?
-
+  
 
 */
 
