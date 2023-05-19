@@ -58,10 +58,9 @@ class HomePage extends StatelessWidget {
 
 class Config extends InheritedWidget {
   final String appName;
-  //an das Kind werden unsere Informationen(hier myConf) weitergegeben
+
   const Config({super.key, required this.appName, required Widget child}) : super(child: child);
 
-  //Alle Kinder werden bei Änderung informiert
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
 

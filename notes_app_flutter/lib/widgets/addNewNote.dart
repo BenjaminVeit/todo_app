@@ -42,6 +42,7 @@ class addNewNote extends StatelessWidget {
                   ),
                   const CupertinoTextField(
                     //TODO: Wenn submitted bzw. fertig, dann Tastatur einfahren lassen
+                    //TODO: Sollte eine Zeichen beschränkung eingegeben werden mit maximale Zeilen?
                     //focusNode: _commentFocusNode,
                     placeholder: 'Beschreibung',
                     maxLines: 3,
@@ -54,7 +55,7 @@ class addNewNote extends StatelessWidget {
                   ),
                   CupertinoButton(
                     onPressed: () {
-                      //TODO: Wenn gedrückt, dann Eintrag in DB schreiben
+                      //TODO: Wenn gedrückt, dann Eintrag in DB schreiben --> ggf. toast anzeigen lassen
                       Navigator.of(context).pop();
                     },
                     child: const Text('Erstellen'),
