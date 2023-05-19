@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:notes_app_flutter/widgets/addNewNote.dart';
 import 'package:notes_app_flutter/widgets/navDrawer.dart';
 
@@ -8,7 +7,17 @@ void main() {
   runApp(const MainApp());
 }
 
-//TODO:
+/*
+TODO:
+- Datenbankanbindung erstellen vllt. zwei Tabellen, einmal mit ID Titel und dann FK auf andere Tabelle, welche ID, Titel, Beschreibung, Erstellt, Fertiggestellt? und Fertigstellungsdatum beinhaltet 
+- Beim drücken auf erstellen muss der Eintrag in die DB geschrieben werden
+- Beim build müssen alle Einträge aus der DB gelesen werden 
+- Einstellungen für Darkmode?
+- Wenn User auf Abgeschlossene Einträge geht, dann sollen hier alle gelistet werden, welche bei Fertiggestellt ein true haben
+- Vielleicht vom Benutzer beim ersten mal starten einen Namen verlangen, welcher immer wieder verwendet wird um eine direkte Ansprache zu ermöglichen?
+
+
+*/
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
