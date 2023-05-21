@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:notes_app_flutter/database/database_helper.dart';
 import 'package:notes_app_flutter/widgets/addNewNote.dart';
 import 'package:notes_app_flutter/widgets/navDrawer.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 /*
@@ -21,9 +24,13 @@ Git local mit dem git remote verbinden
 */
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
 
-  final appName = "ToDo-App"; // current AppName
+  final appName = "ToDo-App";
+
+  final database_helper db = database_helper();
+
+  // current AppName
   @override
   Widget build(BuildContext context) {
     return Config(
@@ -52,7 +59,10 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () => Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const addNewNote())),
+            onPressed: () {
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const addNewNote()));
+              database_helper.exampleUsage();
+            },
             icon: const Icon(Icons.add),
           ),
         ],
