@@ -9,19 +9,28 @@ class database_helper {
   late final bool done;
   //database_helper(this.id, this.title, this.description, this.done);
 
-  /**
-   * Return an database connection
-   */
+  static late Database _database;
+
+  static Future<Database> get database async {
+    if (_database != null) {
+      return _database;
+    }
+
+    _database = await _openDatabase();
+    return _database;
+  }
+
+  ///Return an database connection
   static Future<Database> _openDatabase() async {
+    // Set the path to the database. Note: Using the `join` function from the
+    // `path` package is best practice to ensure the path is correctly
+    // constructed for each platform.
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, 'todoEntrys.db');
     print("Path: $path");
 
     return openDatabase(
       path,
-      // Set the path to the database. Note: Using the `join` function from the
-      // `path` package is best practice to ensure the path is correctly
-      // constructed for each platform.
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         return db.execute(
@@ -33,7 +42,7 @@ class database_helper {
   }
 
   static Future<void> exampleUsage() async {
-    final database = await _openDatabase();
+    final database = await database_helper.database;
 
     // Führe Operationen auf der Datenbank durch
     await database.insert('todoEntrys', {'title': 'Test', 'description': 'Test Beschreibung', 'done': 0});
@@ -43,6 +52,6 @@ class database_helper {
     // Schließe die Datenbankverbindung, wenn sie nicht mehr benötigt wird
     // Du kannst dies an anderer Stelle oder in einer "dispose" Methode aufrufen.
     // Dieses Beispiel zeigt, dass die Verbindung nach Abschluss der Operation geschlossen wird.
-    await database.close();
+    //await database.close();
   }
 }
