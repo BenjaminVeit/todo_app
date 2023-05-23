@@ -3,21 +3,21 @@ import 'package:sqflite/sqflite.dart';
 
 class database_helper {
 // welche ID, Titel, Beschreibung, Erstellt, Fertiggestellt? und Fertigstellungsdatum beinhaltet
-  late final int id;
-  late final String title;
-  late final String description;
-  late final bool done;
+  // late final int id;
+  // late final String title;
+  // late final String description;
+  // late final bool done;
   //database_helper(this.id, this.title, this.description, this.done);
 
-  static late Database _database;
+  static Database? _database;
 
   static Future<Database> get database async {
     if (_database != null) {
-      return _database;
+      return _database!;
     }
 
     _database = await _openDatabase();
-    return _database;
+    return _database!;
   }
 
   ///Return an database connection
@@ -39,6 +39,15 @@ class database_helper {
       },
       version: 1,
     );
+  }
+
+  static Future<List<Map<String, Object?>>> getAllEntrys() async {
+    final database = await database_helper.database;
+    await database.rawQuery("SELECT * FROM todoEntrys");
+    List<Map<String, Object?>> ret = await database.query('todoEntrys');
+    print("INSIDE GET");
+    print(ret);
+    return ret;
   }
 
   static Future<void> exampleUsage() async {

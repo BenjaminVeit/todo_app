@@ -24,11 +24,9 @@ Git local mit dem git remote verbinden
 */
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
+  const MainApp({super.key});
 
   final appName = "ToDo-App";
-
-  final database_helper db = database_helper();
 
   // current AppName
   @override
@@ -37,16 +35,18 @@ class MainApp extends StatelessWidget {
       appName: appName,
       child: MaterialApp(
         title: appName,
-        home: const HomePage(),
+        home: HomePage(),
       ),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({
+  HomePage({
     super.key,
   });
+
+  late List<Map<String, Object?>> allEntrys;
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +67,51 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const CupertinoPageScaffold(
-        child: Center(
-          child: Text("Hallo"),
-        ),
-      ),
+      body: FutureBuilder(
+          future: _getEachEntryFromDB(),
+          builder: (context, AsyncSnapshot<List<Map<String, Object?>>> snapshot) {
+            if (snapshot.hasData) {
+              allEntrys = snapshot.data!;
+              return ListView.separated(
+                  itemBuilder: (contex, index) => ListTile(
+                        leading: Text("${allEntrys.elementAt(index)['id']}"),
+                        title: Text("${allEntrys.elementAt(index)['title']}"),
+                        onTap: () {},
+                      ),
+                  separatorBuilder: (context, _) => const Divider(),
+                  itemCount: allEntrys.length);
+            } else {
+              return const Text("No data!");
+            }
+          }
+          // child: ListView.separated(
+          //     itemBuilder: (contex, index) => ListTile(
+          //           title: Text("${allEntrys?.elementAt(index).values}"),
+          //           onTap: () {},
+          //         ),
+          //     separatorBuilder: (context, _) => const Divider(),
+          //     itemCount: allEntrys.length),
+          ),
     );
   }
+
+  Future<List<Map<String, Object?>>> _getEachEntryFromDB() async {
+    return await database_helper.getAllEntrys();
+  }
 }
+
+/**
+ * 
+ * ListView. separated (
+  itemCount: items.length,
+  itemBuilder: (context, index) => ListTile(
+    title: Text(items.elementAt(index) + (++index).toString()),
+    onTap: () {},
+  ), 
+  separatorBuilder: (context, _) => Divider(),
+);
+
+ */
 
 class Config extends InheritedWidget {
   final String appName;
