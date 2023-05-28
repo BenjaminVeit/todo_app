@@ -41,11 +41,16 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({
     super.key,
   });
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   late List<Map<String, Object?>> allEntrys;
 
   @override
@@ -60,38 +65,33 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => const addNewNote()));
-              database_helper.exampleUsage();
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => addNewNote())).then((value) => setState(() {
+                    _getEachEntryFromDB();
+                  }));
+              //database_helper.exampleUsage();
             },
             icon: const Icon(Icons.add),
           ),
         ],
       ),
       body: FutureBuilder(
-          future: _getEachEntryFromDB(),
-          builder: (context, AsyncSnapshot<List<Map<String, Object?>>> snapshot) {
-            if (snapshot.hasData) {
-              allEntrys = snapshot.data!;
-              return ListView.separated(
-                  itemBuilder: (contex, index) => ListTile(
-                        leading: Text("${allEntrys.elementAt(index)['id']}"),
-                        title: Text("${allEntrys.elementAt(index)['title']}"),
-                        onTap: () {},
-                      ),
-                  separatorBuilder: (context, _) => const Divider(),
-                  itemCount: allEntrys.length);
-            } else {
-              return const Text("No data!");
-            }
+        future: _getEachEntryFromDB(),
+        builder: (context, AsyncSnapshot<List<Map<String, Object?>>> snapshot) {
+          if (snapshot.hasData) {
+            allEntrys = snapshot.data!;
+            return ListView.separated(
+                itemBuilder: (contex, index) => ListTile(
+                      leading: Text("${allEntrys.elementAt(index)['id']}"),
+                      title: Text("${allEntrys.elementAt(index)['title']}"),
+                      onTap: () {},
+                    ),
+                separatorBuilder: (context, _) => const Divider(),
+                itemCount: allEntrys.length);
+          } else {
+            return const Text("No data!");
           }
-          // child: ListView.separated(
-          //     itemBuilder: (contex, index) => ListTile(
-          //           title: Text("${allEntrys?.elementAt(index).values}"),
-          //           onTap: () {},
-          //         ),
-          //     separatorBuilder: (context, _) => const Divider(),
-          //     itemCount: allEntrys.length),
-          ),
+        },
+      ),
     );
   }
 
@@ -99,19 +99,6 @@ class HomePage extends StatelessWidget {
     return await database_helper.getAllEntrys();
   }
 }
-
-/**
- * 
- * ListView. separated (
-  itemCount: items.length,
-  itemBuilder: (context, index) => ListTile(
-    title: Text(items.elementAt(index) + (++index).toString()),
-    onTap: () {},
-  ), 
-  separatorBuilder: (context, _) => Divider(),
-);
-
- */
 
 class Config extends InheritedWidget {
   final String appName;

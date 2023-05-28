@@ -45,9 +45,17 @@ class database_helper {
     final database = await database_helper.database;
     await database.rawQuery("SELECT * FROM todoEntrys");
     List<Map<String, Object?>> ret = await database.query('todoEntrys');
-    print("INSIDE GET");
     print(ret);
     return ret;
+  }
+
+  static void insertNote(String title, String description) async {
+    final database = await database_helper.database;
+    final values = <String, dynamic>{
+      'title': title,
+      'description': description,
+    };
+    await database.insert('todoEntrys', values);
   }
 
   static Future<void> exampleUsage() async {
