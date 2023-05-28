@@ -32,73 +32,77 @@ class _addNewNoteState extends State<addNewNote> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(context.dependOnInheritedWidgetOfExactType<Config>()!.appName),
-          centerTitle: true,
-        ),
-        body: CupertinoPageScaffold(
-          backgroundColor: CupertinoColors.secondarySystemBackground,
-          child: Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Neuer Eintrag',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+      home: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(context.dependOnInheritedWidgetOfExactType<Config>()!.appName),
+            centerTitle: true,
+          ),
+          body: CupertinoPageScaffold(
+            backgroundColor: CupertinoColors.secondarySystemBackground,
+            child: Center(
+              child: FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Neuer Eintrag',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  CupertinoTextField(
-                    //TODO: Wenn fertig, Focus auf die Beschreibung legen
-                    placeholder: "Titel",
-                    clearButtonMode: OverlayVisibilityMode.editing,
-                    controller: _feedbackTitleController,
-                    onSubmitted: (value) => _descriptionFocusNode.requestFocus(),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  StatefulBuilder(
-                    builder: (context, builderSetState) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              CupertinoTextField(
-                                //TODO: Wenn submitted bzw. fertig, dann Tastatur einfahren lassen
-                                //TODO: Sollte eine Zeichen beschränkung eingegeben werden mit maximale Zeilen?
-                                focusNode: _descriptionFocusNode,
-                                placeholder: 'Beschreibung',
-                                maxLines: 3,
-                                maxLength: feedbackMaxLength,
-                                controller: _feedbackDescriptionController,
-                                onChanged: (value) => builderSetState(() {}),
-                              ),
-                              Text('${_feedbackDescriptionController.text.length} / $feedbackMaxLength'),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  CupertinoButton(
-                    onPressed: () {
-                      //TODO: Wenn gedrückt, dann Eintrag in DB schreiben --> ggf. toast anzeigen lassen
-                      database_helper.insertNote(_feedbackTitleController.text, _feedbackDescriptionController.text);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Erstellen'),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    CupertinoTextField(
+                      //TODO: Wenn fertig, Focus auf die Beschreibung legen
+                      placeholder: "Titel",
+                      clearButtonMode: OverlayVisibilityMode.editing,
+                      controller: _feedbackTitleController,
+                      onSubmitted: (value) => "",
+                      onEditingComplete: () => _descriptionFocusNode.requestFocus(),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    StatefulBuilder(
+                      builder: (context, builderSetState) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                CupertinoTextField(
+                                  //TODO: Wenn submitted bzw. fertig, dann Tastatur einfahren lassen
+                                  //TODO: Sollte eine Zeichen beschränkung eingegeben werden mit maximale Zeilen?
+                                  focusNode: _descriptionFocusNode,
+                                  placeholder: 'Beschreibung',
+                                  maxLines: 3,
+                                  maxLength: feedbackMaxLength,
+                                  controller: _feedbackDescriptionController,
+                                  onChanged: (value) => builderSetState(() {}),
+                                ),
+                                Text('${_feedbackDescriptionController.text.length} / $feedbackMaxLength'),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    CupertinoButton(
+                      onPressed: () {
+                        //TODO: Wenn gedrückt, dann Eintrag in DB schreiben --> ggf. toast anzeigen lassen
+                        database_helper.insertNote(_feedbackTitleController.text, _feedbackDescriptionController.text);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Erstellen'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
